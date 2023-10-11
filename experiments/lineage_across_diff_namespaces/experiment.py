@@ -34,7 +34,14 @@ event_a_start_run = {
     "eventType": "START",
 
     "run": {
-        "runId": run_ids[0]
+        "runId": run_ids[0],
+        "facets": {
+            "nominalTime": {
+                "_producer": "https://github.com/OpenLineage/OpenLineage/tree/0.10.0/integration/airflow",
+                "_schemaURL": "https://raw.githubusercontent.com/OpenLineage/OpenLineage/main/spec/OpenLineage.json#/definitions/NominalTimeRunFacet",
+                "nominalStartTime": get_now_formatted()
+            }
+        }
     },
     "job": {
         "namespace": namespaces[0],
@@ -128,7 +135,14 @@ event_a_complete_run = {
     "eventType": "COMPLETE",
 
     "run": {
-        "runId": run_ids[0]
+        "runId": run_ids[0],
+        "facets": {
+            "nominalTime": {
+                "_producer": "https://github.com/OpenLineage/OpenLineage/tree/0.10.0/integration/airflow",
+                "_schemaURL": "https://raw.githubusercontent.com/OpenLineage/OpenLineage/main/spec/OpenLineage.json#/definitions/NominalTimeRunFacet",
+                "nominalStartTime": get_now_formatted()
+            }
+        }
     },
     "job": {
         "namespace": namespaces[0],
@@ -275,7 +289,25 @@ event_b_start_run = {
     "eventType": "START",
 
     "run": {
-        "runId": run_ids[1]
+        "runId": run_ids[1],
+        "facets": {
+            "nominalTime": {
+                "_producer": "https://github.com/OpenLineage/OpenLineage/tree/0.10.0/integration/airflow",
+                "_schemaURL": "https://raw.githubusercontent.com/OpenLineage/OpenLineage/main/spec/OpenLineage.json#/definitions/NominalTimeRunFacet",
+                "nominalStartTime": get_now_formatted()
+            },
+            "parentRun": {
+                "_producer": "https://github.com/OpenLineage/OpenLineage/tree/0.10.0/integration/airflow",
+                "_schemaURL": "https://raw.githubusercontent.com/OpenLineage/OpenLineage/main/spec/OpenLineage.json#/definitions/ParentRunFacet",
+                "job": {
+                    "namespace": namespaces[0],
+                    "name": job_names[0],
+                },
+                "run": {
+                    "runId": run_ids[0]
+                }
+            }
+        }
     },
     "job": {
         "namespace": namespaces[1],
@@ -347,7 +379,25 @@ event_b_complete_run = {
     "eventType": "COMPLETE",
 
     "run": {
-        "runId": run_ids[1]
+        "runId": run_ids[1],
+        "facets": {
+            "nominalTime": {
+                "_producer": "https://github.com/OpenLineage/OpenLineage/tree/0.10.0/integration/airflow",
+                "_schemaURL": "https://raw.githubusercontent.com/OpenLineage/OpenLineage/main/spec/OpenLineage.json#/definitions/NominalTimeRunFacet",
+                "nominalStartTime": get_now_formatted()
+            },
+            "parentRun": {
+                "_producer": "https://github.com/OpenLineage/OpenLineage/tree/0.10.0/integration/airflow",
+                "_schemaURL": "https://raw.githubusercontent.com/OpenLineage/OpenLineage/main/spec/OpenLineage.json#/definitions/ParentRunFacet",
+                "job": {
+                    "namespace": namespaces[0],
+                    "name": job_names[0],
+                },
+                "run": {
+                    "runId": run_ids[0]
+                }
+            }
+        }
     },
     "job": {
         "namespace": namespaces[1],
