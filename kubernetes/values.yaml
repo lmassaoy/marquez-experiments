@@ -10,7 +10,7 @@
 marquez:
   ## Number of desired replicas
   ##
-  replicaCount: 5
+  replicaCount: 3
   ## Marquez image version
   ## ref: https://hub.docker.com/r/marquezproject/marquez/tags/
   ##

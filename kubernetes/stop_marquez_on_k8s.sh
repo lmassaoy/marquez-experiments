@@ -1,1 +1,1 @@
-helm delete marquez
+helm delete marquez --namespace marquez

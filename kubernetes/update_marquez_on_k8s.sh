@@ -1,0 +1,1 @@
+helm upgrade marquez . --dependency-update -f values.yaml --namespace marquez
