@@ -10,7 +10,6 @@ def get_now_formatted():
     return current_timestamp[:-8]+current_timestamp[-5:-2]+":"+current_timestamp[-2:]
 
 
-print(f'starting at: {get_now_formatted()}')
 marquez_url = "http://localhost:5000/api/v1"
 
 
@@ -296,17 +295,17 @@ event_b_start_run = {
                 "_schemaURL": "https://raw.githubusercontent.com/OpenLineage/OpenLineage/main/spec/OpenLineage.json#/definitions/NominalTimeRunFacet",
                 "nominalStartTime": get_now_formatted()
             },
-            "parentRun": {
-                "_producer": "https://github.com/OpenLineage/OpenLineage/tree/0.10.0/integration/airflow",
-                "_schemaURL": "https://raw.githubusercontent.com/OpenLineage/OpenLineage/main/spec/OpenLineage.json#/definitions/ParentRunFacet",
-                "job": {
-                    "namespace": namespaces[0],
-                    "name": job_names[0],
-                },
-                "run": {
-                    "runId": run_ids[0]
-                }
-            }
+            # "parentRun": {
+            #     "_producer": "https://github.com/OpenLineage/OpenLineage/tree/0.10.0/integration/airflow",
+            #     "_schemaURL": "https://raw.githubusercontent.com/OpenLineage/OpenLineage/main/spec/OpenLineage.json#/definitions/ParentRunFacet",
+            #     "job": {
+            #         "namespace": namespaces[0],
+            #         "name": job_names[0],
+            #     },
+            #     "run": {
+            #         "runId": run_ids[0]
+            #     }
+            # }
         }
     },
     "job": {
@@ -386,17 +385,17 @@ event_b_complete_run = {
                 "_schemaURL": "https://raw.githubusercontent.com/OpenLineage/OpenLineage/main/spec/OpenLineage.json#/definitions/NominalTimeRunFacet",
                 "nominalStartTime": get_now_formatted()
             },
-            "parentRun": {
-                "_producer": "https://github.com/OpenLineage/OpenLineage/tree/0.10.0/integration/airflow",
-                "_schemaURL": "https://raw.githubusercontent.com/OpenLineage/OpenLineage/main/spec/OpenLineage.json#/definitions/ParentRunFacet",
-                "job": {
-                    "namespace": namespaces[0],
-                    "name": job_names[0],
-                },
-                "run": {
-                    "runId": run_ids[0]
-                }
-            }
+            # "parentRun": {
+            #     "_producer": "https://github.com/OpenLineage/OpenLineage/tree/0.10.0/integration/airflow",
+            #     "_schemaURL": "https://raw.githubusercontent.com/OpenLineage/OpenLineage/main/spec/OpenLineage.json#/definitions/ParentRunFacet",
+            #     "job": {
+            #         "namespace": namespaces[0],
+            #         "name": job_names[0],
+            #     },
+            #     "run": {
+            #         "runId": run_ids[0]
+            #     }
+            # }
         }
     },
     "job": {
@@ -494,6 +493,328 @@ event_b_complete_run = {
 
 try:
     response = requests.post(url=f'{marquez_url}/lineage',json=event_b_complete_run)
+except Exception as e:
+    print(f'An Exception happend: {e}')
+else:
+    print(f'{get_now_formatted()}, response status code: {response.status_code}')
+
+
+event_c_start_run = {
+    "eventTime": get_now_formatted(),
+    "producer": "https://github.com/OpenLineage/OpenLineage/blob/v1-0-0/client",
+    "schemaURL": "https://openlineage.io/spec/1-0-5/OpenLineage.json#/definitions/RunEvent",
+
+    "eventType": "START",
+
+    "run": {
+        "runId": run_ids[2],
+        "facets": {
+            "nominalTime": {
+                "_producer": "https://github.com/OpenLineage/OpenLineage/tree/0.10.0/integration/airflow",
+                "_schemaURL": "https://raw.githubusercontent.com/OpenLineage/OpenLineage/main/spec/OpenLineage.json#/definitions/NominalTimeRunFacet",
+                "nominalStartTime": get_now_formatted()
+            },
+            # "parentRun": {
+            #     "_producer": "https://github.com/OpenLineage/OpenLineage/tree/0.10.0/integration/airflow",
+            #     "_schemaURL": "https://raw.githubusercontent.com/OpenLineage/OpenLineage/main/spec/OpenLineage.json#/definitions/ParentRunFacet",
+            #     "job": {
+            #         "namespace": namespaces[0],
+            #         "name": job_names[0],
+            #     },
+            #     "run": {
+            #         "runId": run_ids[0]
+            #     }
+            # }
+        }
+    },
+    "job": {
+        "namespace": namespaces[2],
+        "name": job_names[2],
+        "type": "SERVICE",
+        "facets": {
+            "ownership": {
+                "_producer": "https://some.producer.com/version/1.0",
+                "_schemaURL": "https://openlineage.io/spec/facets/1-0-0/OwnershipJobFacet.json",
+                "owners": [
+                    {
+                        "name": "lyamada",
+                        "type": "MAINTAINER"
+                    }
+                ]
+            },
+            "documentation": {
+                "_producer": "https://some.producer.com/version/1.0",
+                "_schemaURL": "https://github.com/OpenLineage/OpenLineage/blob/main/spec/facets/DocumentationJobFacet.json",
+                "description": "Job C reads the source dataset_a + dataset_b and produces dataset_c."
+            },
+            "sourceCode": {
+                "_producer": "https://some.producer.com/version/1.0",
+                "_schemaURL": "https://github.com/OpenLineage/OpenLineage/blob/main/spec/facets/SourceCodeJobFacet.json",
+                "language": "python",
+                "sourceCode": """
+                    my_c_query = '''
+                        SELECT
+                            dsa.a as event_id,
+                            dsa.e as event_time,
+                            dsa.b + dsa.c as sum_bc,
+                            dsa.d as salary,
+                            dsb.double_salary as double_salary
+                        FROM
+                            dataset_a dsa
+                        LEFT JOIN
+                            dataset_b dsb
+                        ON
+                            dsa.a = dsb.a
+                    '''
+
+                    my_df = spark.sql('')
+                    my_df.coalesce(1).write.parquet("dataset_c")
+                """
+            },
+            "sourceCodeLocation": {
+                "_producer": "https://some.producer.com/version/1.0",
+                "_schemaURL": "https://github.com/OpenLineage/OpenLineage/blob/main/spec/facets/SourceCodeLocationJobFacet.json",
+                "type": "git",
+                "url": "https://github.com/lmassaoy/marquez-experiments/blob/main/experiments/lineage_across_diff_namespaces/experiment.py",
+                "repoUrl": "https://github.com/lmassaoy/marquez-experiments.git",
+                "path": "experiments/lineage_across_diff_namespaces/",
+                "version": "https://github.com/lmassaoy/marquez-experiments/commit/0c79e8bfe4b406f80f096510b33ee42e466f0e28",
+                "tag": "some_nice_tag",
+                "branch": "main"
+            },
+            "sql": {
+                "_producer": "https://some.producer.com/version/1.0",
+                "_schemaURL": "https://github.com/OpenLineage/OpenLineage/blob/main/spec/facets/SQLJobFacet.json",
+                "query": """
+SELECT
+    dsa.a as event_id,
+    dsa.e as event_time,
+    dsa.b + dsa.c as sum_bc,
+    dsa.d as salary,
+    dsb.double_salary as double_salary
+FROM
+    dataset_a dsa
+LEFT JOIN
+    dataset_b dsb
+ON
+    dsa.a = dsb.a
+                """
+            }
+        }
+    },
+    "inputs": [
+        {
+            "namespace": namespaces[0],
+            "name": datasets[0]
+        },
+        {
+            "namespace": namespaces[1],
+            "name": datasets[1]
+        }
+    ]
+}
+
+try:
+    response = requests.post(url=f'{marquez_url}/lineage',json=event_c_start_run)
+except Exception as e:
+    print(f'An Exception happend: {e}')
+else:
+    print(f'{get_now_formatted()}, response status code: {response.status_code}')
+
+time.sleep(5)
+
+event_c_complete_run = {
+    "eventTime": get_now_formatted(),
+    "producer": "https://github.com/OpenLineage/OpenLineage/blob/v1-0-0/client",
+    "schemaURL": "https://openlineage.io/spec/1-0-5/OpenLineage.json#/definitions/RunEvent",
+
+    "eventType": "COMPLETE",
+
+    "run": {
+        "runId": run_ids[2],
+        "facets": {
+            "nominalTime": {
+                "_producer": "https://github.com/OpenLineage/OpenLineage/tree/0.10.0/integration/airflow",
+                "_schemaURL": "https://raw.githubusercontent.com/OpenLineage/OpenLineage/main/spec/OpenLineage.json#/definitions/NominalTimeRunFacet",
+                "nominalStartTime": get_now_formatted()
+            },
+            # "parentRun": {
+            #     "_producer": "https://github.com/OpenLineage/OpenLineage/tree/0.10.0/integration/airflow",
+            #     "_schemaURL": "https://raw.githubusercontent.com/OpenLineage/OpenLineage/main/spec/OpenLineage.json#/definitions/ParentRunFacet",
+            #     "job": {
+            #         "namespace": namespaces[0],
+            #         "name": job_names[0],
+            #     },
+            #     "run": {
+            #         "runId": run_ids[0]
+            #     }
+            # }
+        }
+    },
+    "job": {
+        "namespace": namespaces[2],
+        "name": job_names[2],
+        "type": "SERVICE",
+        "facets": {
+            "ownership": {
+                "_producer": "https://some.producer.com/version/1.0",
+                "_schemaURL": "https://openlineage.io/spec/facets/1-0-0/OwnershipJobFacet.json",
+                "owners": [
+                    {
+                        "name": "lyamada",
+                        "type": "MAINTAINER"
+                    }
+                ]
+            },
+            "documentation": {
+                "_producer": "https://some.producer.com/version/1.0",
+                "_schemaURL": "https://github.com/OpenLineage/OpenLineage/blob/main/spec/facets/DocumentationJobFacet.json",
+                "description": "Job C reads the source dataset_a + dataset_b and produces dataset_c."
+            },
+            "sourceCode": {
+                "_producer": "https://some.producer.com/version/1.0",
+                "_schemaURL": "https://github.com/OpenLineage/OpenLineage/blob/main/spec/facets/SourceCodeJobFacet.json",
+                "language": "python",
+                "sourceCode": """
+                    my_c_query = '''
+                        SELECT
+                            dsa.a as event_id,
+                            dsa.e as event_time,
+                            dsa.b + dsa.c as sum_bc,
+                            dsa.d as salary,
+                            dsb.double_salary as double_salary
+                        FROM
+                            dataset_a dsa
+                        LEFT JOIN
+                            dataset_b dsb
+                        ON
+                            dsa.a = dsb.a
+                    '''
+
+                    my_df = spark.sql('')
+                    my_df.coalesce(1).write.parquet("dataset_c")
+                """
+            },
+            "sourceCodeLocation": {
+                "_producer": "https://some.producer.com/version/1.0",
+                "_schemaURL": "https://github.com/OpenLineage/OpenLineage/blob/main/spec/facets/SourceCodeLocationJobFacet.json",
+                "type": "git",
+                "url": "https://github.com/lmassaoy/marquez-experiments/blob/main/experiments/lineage_across_diff_namespaces/experiment.py",
+                "repoUrl": "https://github.com/lmassaoy/marquez-experiments.git",
+                "path": "experiments/lineage_across_diff_namespaces/",
+                "version": "https://github.com/lmassaoy/marquez-experiments/commit/0c79e8bfe4b406f80f096510b33ee42e466f0e28",
+                "tag": "some_nice_tag",
+                "branch": "main"
+            },
+            "sql": {
+                "_producer": "https://some.producer.com/version/1.0",
+                "_schemaURL": "https://github.com/OpenLineage/OpenLineage/blob/main/spec/facets/SQLJobFacet.json",
+                "query": """
+SELECT
+    dsa.a as event_id,
+    dsa.e as event_time,
+    dsa.b + dsa.c as sum_bc,
+    dsa.d as salary,
+    dsb.double_salary as double_salary
+FROM
+    dataset_a dsa
+LEFT JOIN
+    dataset_b dsb
+ON
+    dsa.a = dsb.a
+                """
+            }
+        }
+    },
+    "outputs": [{
+        "namespace": namespaces[2],
+        "name": datasets[2],
+        "physicalName": 's3://my_bucket/'+datasets[2],
+        "type": "FILE",
+        "facets": {
+            "schema": {
+                "_producer": "https://github.com/OpenLineage/OpenLineage/blob/v1-0-0/client",
+                "_schemaURL": "https://github.com/OpenLineage/OpenLineage/blob/v1-0-0/spec/OpenLineage.json#/definitions/SchemaDatasetFacet",
+                "fields": [
+                    { "name": "event_id", "type": "VARCHAR", "description": "this is the column EVENT ID"},
+                    { "name": "event_time", "type": "TIMESTAMP", "description": "this is the column EVENT TIME"},
+                    { "name": "sum_bc", "type": "INTEGER", "description": "this is the column SUM BC"},
+                    { "name": "salary", "type": "VARCHAR", "description": "this is the column SALARY"},
+                    { "name": "double_salary", "type": "INTEGER", "description": "this is the column DOUBLE SALARY"}
+                ]
+            },
+            "columnLineage": {
+                "_producer": "https://github.com/MarquezProject/marquez/blob/main/docker/metadata.json",
+                "_schemaURL": "https://openlineage.io/spec/facets/1-0-1/ColumnLineageDatasetFacet.json",
+                "fields": {
+                    "event_id": {
+                        "inputFields": [
+                            {
+                                "namespace": namespaces[0],
+                                "name": datasets[0],
+                                "field": "a"
+                            }
+                        ],
+                        "transformationDescription": "",
+                        "transformationType": "SQL"
+                    },
+                    "event_time": {
+                        "inputFields": [
+                            {
+                                "namespace": namespaces[0],
+                                "name": datasets[0],
+                                "field": "e"
+                            }
+                        ],
+                        "transformationDescription": "",
+                        "transformationType": "SQL"
+                    },
+                    "sum_bc": {
+                        "inputFields": [
+                            {
+                                "namespace": namespaces[0],
+                                "name": datasets[0],
+                                "field": "b"
+                            },
+                            {
+                                "namespace": namespaces[0],
+                                "name": datasets[0],
+                                "field": "c"
+                            }
+                        ],
+                        "transformationDescription": "b+c",
+                        "transformationType": "SQL"
+                    },
+                    "salary": {
+                        "inputFields": [
+                            {
+                                "namespace": namespaces[0],
+                                "name": datasets[0],
+                                "field": "d"
+                            }
+                        ],
+                        "transformationDescription": "",
+                        "transformationType": "SQL"
+                    },
+                    "double_salary": {
+                        "inputFields": [
+                            {
+                                "namespace": namespaces[1],
+                                "name": datasets[1],
+                                "field": "double_salary"
+                            }
+                        ],
+                        "transformationDescription": "",
+                        "transformationType": "SQL"
+                    }
+                }
+            }
+        }
+    }]
+}
+
+try:
+    response = requests.post(url=f'{marquez_url}/lineage',json=event_c_complete_run)
 except Exception as e:
     print(f'An Exception happend: {e}')
 else:
