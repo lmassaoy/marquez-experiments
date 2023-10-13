@@ -1,14 +1,14 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: marquez
+  name: marquez-web
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: marquez
-  minReplicas: 3
-  maxReplicas: 10
+    name: marquez-web
+  minReplicas: 2
+  maxReplicas: 5
   behavior:
     scaleDown:
       stabilizationWindowSeconds: 60

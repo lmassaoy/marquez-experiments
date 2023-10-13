@@ -74,7 +74,7 @@ web:
   enabled: true
   ## Number of desired replicas
   ##
-  replicaCount: 3
+  replicaCount: 2
   ## Marquez web image version
   ## ref: https://hub.docker.com/r/marquezproject/marquez-web/tags/
   ##
@@ -92,13 +92,14 @@ web:
   resources:
     # Typically best to not specify these settings, unless you've got a specific
     # reason to customize.
-    limits: {}
-    #    cpu: 200m
-    #    memory: 1Gi
-    # requests:
-      # memory: 500Mi
-      # cpu: 200m
-    requests: {}
+    # limits: {}
+    # requests: {}
+    requests:
+      memory: 300Mi
+      cpu: 200m
+    limits:
+      memory: 500Mi
+      cpu: 300m
 
 ## PostgreSQL chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
