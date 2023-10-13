@@ -1,0 +1,1 @@
+kubectl get hpa marquez --namespace=marquez --watch

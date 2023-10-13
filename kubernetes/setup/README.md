@@ -27,12 +27,14 @@ brew install minikube
 ```
 minikube start
 minikube addons enable ingress
+minikube addons enable metrics-server
 kubectl create namespace marquez
 ```
 
-### Setting up Kubernetes Dashboard
+### Setting up Kubernetes Dashboard + Metrics
 ```
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 ```
 
 ### Prepare the admin user for logging into the Kubernetes Dashboard

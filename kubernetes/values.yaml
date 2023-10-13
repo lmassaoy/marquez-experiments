@@ -49,12 +49,18 @@ marquez:
   resources:
     # Typically best to not specify these settings, unless you've got a specific
     # reason to customize.
-    limits: {}
+    # limits: {}
     #    cpu: 200m
     #    memory: 1Gi
-    requests: {}
+    # requests: {}
     #    memory: 256Mi
     #    cpu: 250m
+    requests:
+      memory: 500Mi
+      cpu: 200m
+    limits:
+      memory: 750Mi
+      cpu: 300m
   podAnnotations: {}
   ## - name:
   ##   value:
@@ -89,9 +95,10 @@ web:
     limits: {}
     #    cpu: 200m
     #    memory: 1Gi
+    # requests:
+      # memory: 500Mi
+      # cpu: 200m
     requests: {}
-    #    memory: 256Mi
-    #    cpu: 250m
 
 ## PostgreSQL chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
