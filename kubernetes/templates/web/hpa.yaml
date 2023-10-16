@@ -8,7 +8,7 @@ spec:
     kind: Deployment
     name: marquez-web
   minReplicas: {{ default 2 .Values.web.replicaCount }}
-  maxReplicas: 5
+  maxReplicas: {{ default 5 .Values.web.maxReplicaCount }}
   behavior:
     scaleDown:
       stabilizationWindowSeconds: 60

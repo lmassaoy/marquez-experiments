@@ -11,6 +11,7 @@ marquez:
   ## Number of desired replicas
   ##
   replicaCount: 3
+  maxReplicaCount: 10
   ## Marquez image version
   ## ref: https://hub.docker.com/r/marquezproject/marquez/tags/
   ##
@@ -75,6 +76,7 @@ web:
   ## Number of desired replicas
   ##
   replicaCount: 2
+  maxReplicaCount: 5
   ## Marquez web image version
   ## ref: https://hub.docker.com/r/marquezproject/marquez-web/tags/
   ##

@@ -8,7 +8,7 @@ spec:
     kind: Deployment
     name: marquez
   minReplicas: {{ default 3 .Values.marquez.replicaCount }}
-  maxReplicas: 10
+  maxReplicas: {{ default 10 .Values.marquez.maxReplicaCount }}
   behavior:
     scaleDown:
       stabilizationWindowSeconds: 60
