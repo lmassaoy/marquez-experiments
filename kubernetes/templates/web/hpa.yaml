@@ -7,8 +7,8 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: marquez-web
-  minReplicas: 2
-  maxReplicas: 5
+  minReplicas: {{ default 2 .Values.web.replicaCount }}
+  maxReplicas: {{ default 5 .Values.web.maxReplicaCount }}
   behavior:
     scaleDown:
       stabilizationWindowSeconds: 60
