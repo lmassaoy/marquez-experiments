@@ -139,7 +139,8 @@ event_a_complete_run = {
             "nominalTime": {
                 "_producer": "https://github.com/OpenLineage/OpenLineage/tree/0.10.0/integration/airflow",
                 "_schemaURL": "https://raw.githubusercontent.com/OpenLineage/OpenLineage/main/spec/OpenLineage.json#/definitions/NominalTimeRunFacet",
-                "nominalStartTime": get_now_formatted()
+                "nominalStartTime": event_a_start_run['run']['facets']['nominalTime']['nominalStartTime'],
+                "nominalEndTime": get_now_formatted(),
             }
         }
     },
@@ -383,7 +384,8 @@ event_b_complete_run = {
             "nominalTime": {
                 "_producer": "https://github.com/OpenLineage/OpenLineage/tree/0.10.0/integration/airflow",
                 "_schemaURL": "https://raw.githubusercontent.com/OpenLineage/OpenLineage/main/spec/OpenLineage.json#/definitions/NominalTimeRunFacet",
-                "nominalStartTime": get_now_formatted()
+                "nominalStartTime": event_b_start_run['run']['facets']['nominalTime']['nominalStartTime'],
+                "nominalEndTime": get_now_formatted()
             },
             # "parentRun": {
             #     "_producer": "https://github.com/OpenLineage/OpenLineage/tree/0.10.0/integration/airflow",
@@ -636,7 +638,8 @@ event_c_complete_run = {
             "nominalTime": {
                 "_producer": "https://github.com/OpenLineage/OpenLineage/tree/0.10.0/integration/airflow",
                 "_schemaURL": "https://raw.githubusercontent.com/OpenLineage/OpenLineage/main/spec/OpenLineage.json#/definitions/NominalTimeRunFacet",
-                "nominalStartTime": get_now_formatted()
+                "nominalStartTime": event_c_start_run['run']['facets']['nominalTime']['nominalStartTime'],
+                "nominalEndTime": get_now_formatted()
             },
             # "parentRun": {
             #     "_producer": "https://github.com/OpenLineage/OpenLineage/tree/0.10.0/integration/airflow",

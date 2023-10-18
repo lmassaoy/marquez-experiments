@@ -1,5 +1,5 @@
 # Marquez Experiments
-Customizing, Deploying, and Testing Marquez capabilities
+Customizing, deploying, and testing Marquez capabilities
 
 ## Experiments
 
