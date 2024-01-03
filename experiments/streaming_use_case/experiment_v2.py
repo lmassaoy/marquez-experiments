@@ -8,10 +8,11 @@ import pytz
 
 
 marquez_url = "http://localhost:5000/api/v1"
-infinite_counter = [i for i in range(1000)]
+# marquez_url = "http://k8s-marquez-marquez-1f83396143-412721712.us-east-1.elb.amazonaws.com/api/v1"
+infinite_counter = [i for i in range(10)]
 parallel_jobs = 10
 parallel_jobs_list = [i for i in range(parallel_jobs)]
-run_ids = [ str(uuid.uuid4()) for i in range(1000) ]
+run_ids = [ str(uuid.uuid4()) for i in range(10) ]
 
 
 def get_now_formatted():
@@ -33,7 +34,7 @@ def hit_marquez(infinite_counter):
         print(f'request {infinite_counter}, starting job: {random_job_id}, run id: {run_id}, response status code: {response.status_code}')
 
     # RUNNING EVENTS
-    for i in range(random.randint(1, 1000)):
+    for i in range(random.randint(1, 100)):
         running_event = create_event_running_run(random_job_id, run_id)
         try:
             response = requests.post(url=f'{marquez_url}/lineage',json=running_event)
@@ -209,14 +210,24 @@ def create_event_running_run(job, run_id):
                     "_producer": "https://some.producer.com/version/1.0",
                     "_schemaURL": "https://github.com/OpenLineage/OpenLineage/blob/main/spec/facets/SQLJobFacet.json",
                     "query": "SELECT event_id, event_timestamp, transaction_type, value FROM banking_transactions"
+                },
+                "jobType": {
+                    "jobType": {
+                        "processingType": "STREAMING",
+                        "integration": "FLINK",
+                        "jobType": "JOB",
+                        "_producer": "https://github.com/OpenLineage/OpenLineage/blob/v1-0-0/client",
+                        "_schemaURL": "https://openlineage.io/spec/facets/2-0-2/JobTypeJobFacet.json"
+                    }
                 }
+                
             }
         },
         "outputs": [{
             "namespace": "namespace_1",
             "name": f"banking_transactions_v{job}",
-            "physicalName": f's3://my_bucket/banking_transactions_v{job}',
-            "type": "FILE",
+            "physicalName": f'nurn:nu:data:stream:banking_transactions_v{job}',
+            "type": "STREAM",
             "facets": {
                 "schema": {
                     "_producer": "https://github.com/OpenLineage/OpenLineage/blob/v1-0-0/client",
@@ -276,6 +287,25 @@ def create_event_running_run(job, run_id):
                             "transformationDescription": "",
                             "transformationType": "SQL"
                         }
+                    }
+                },
+                "additionalMetadata":{
+                    "_producer": "https://some.producer.com/version/1.0",
+                    "_schemaURL": "https://raw.githubusercontent.com/OpenLineage/OpenLineage/main/spec/OpenLineage.json#/definitions/BaseFacet",
+                    "nurn": f'nurn:nu:data:dataset:banking_transactions_v{job}',
+                    "dataAssetType": "Kafka Topic",
+                    "description": "This topic is awesome!",
+                    "schemaLocation": f"http://localhost:8081/banking_transactions_v{job}",
+                },
+                "storage": {
+                    "_producer": "https://some.producer.com/version/1.0",
+                    "_schemaURL": "https://openlineage.io/spec/facets/1-0-0/StorageDatasetFacet.json",
+                    "storageLayer": "kafka",
+                    "fileFormat": "avro",
+                    "location": {
+                        "type": "kafka",
+                        "name": "kafka_broker:9092",
+                        "path": f"banking_transactions_v{job}_topic"
                     }
                 }
             }

@@ -4,12 +4,12 @@ import concurrent.futures
 
 marquez_url = "http://localhost:5000/api/v1"
 marquez_webui_url = "http://localhost:3000"
-infinite_counter = [i for i in range(10000000)]
+infinite_counter = [i for i in range(10000)]
 
 
 def hit_marquez():
-    # response = requests.get(url=f'{marquez_url}/namespaces')
-    response = requests.get(url=f'{marquez_webui_url}')
+    response = requests.get(url=f'{marquez_url}/namespaces')
+    # response = requests.get(url=f'{marquez_webui_url}')
     return response.status_code
 
 
